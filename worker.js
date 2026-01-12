@@ -24,22 +24,37 @@ async function handleRequest(request) {
     return generateFakePage()
   }
   
-  // 处理图片请求 - 代理GitHub图片
+  // 处理图片请求 - 返回SVG LOGO（因为GitHub仓库是私有的）
   if (path === 'x.png') {
-    try {
-      const imageResponse = await fetch('https://raw.githubusercontent.com/SLOMEDIALLC/moboreels/main/x.png')
-      return new Response(imageResponse.body, {
-        headers: {
-          'Content-Type': 'image/png',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-          'Access-Control-Allow-Origin': '*'
-        }
-      })
-    } catch (error) {
-      return new Response('Image not found', { status: 404 })
-    }
+    // 创建一个SVG格式的短剧主题LOGO
+    const svg = `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="200" height="200" rx="40" fill="url(#grad1)"/>
+      <g transform="translate(100, 100)">
+        <!-- TV外框 -->
+        <rect x="-70" y="-50" width="140" height="100" rx="15" fill="white" opacity="0.9"/>
+        <rect x="-60" y="-40" width="120" height="80" rx="10" fill="url(#grad1)"/>
+        <!-- 爱心 -->
+        <path d="M 0,-10 C -15,-25 -30,-15 -30,0 C -30,20 0,35 0,35 C 0,35 30,20 30,0 C 30,-15 15,-25 0,-10 Z" fill="white"/>
+        <!-- 天线 -->
+        <circle cx="-40" cy="-55" r="8" fill="white"/>
+        <rect x="-42" y="-55" width="4" height="15" fill="white"/>
+        <circle cx="40" cy="-55" r="8" fill="white"/>
+        <rect x="38" y="-55" width="4" height="15" fill="white"/>
+      </g>
+    </svg>`;
+    
+    return new Response(svg, {
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'public, max-age=3600'
+      }
+    });
   }
   
   // 如果是根路径访问，返回403
