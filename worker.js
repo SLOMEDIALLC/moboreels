@@ -246,7 +246,7 @@ function generateHtmlContent() {
         }
         
         body {
-            background: linear-gradient(135deg, #0a0000 0%, #1a0a0a 25%, #2d0a14 50%, #1a0a0a 75%, #0a0000 100%);
+            background: linear-gradient(180deg, #001a0f 0%, #002d1a 30%, #00472d 60%, #002d1a 90%, #001a0f 100%);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -259,12 +259,24 @@ function generateHtmlContent() {
             -webkit-overflow-scrolling: touch;
         }
         
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 151, 57, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
         html {
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* 电影胶片背景动画 */
+        /* 短剧主题背景动画 */
         .slot-background {
             position: fixed;
             top: 0;
@@ -272,55 +284,91 @@ function generateHtmlContent() {
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.25;
+            opacity: 0.08;
             pointer-events: none;
-            display: flex;
-            justify-content: space-around;
+            overflow: hidden;
         }
 
-        .slot-column {
-            display: flex;
-            flex-direction: column;
-            font-size: 60px;
-            animation: slotSpin 3s linear infinite;
-            line-height: 1.2;
+        /* 电影胶片条纹 */
+        .film-strip {
+            position: absolute;
+            width: 60px;
+            height: 200%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 151, 57, 0.3) 0px,
+                rgba(0, 151, 57, 0.3) 20px,
+                transparent 20px,
+                transparent 40px,
+                rgba(255, 215, 0, 0.3) 40px,
+                rgba(255, 215, 0, 0.3) 60px,
+                transparent 60px,
+                transparent 80px
+            );
+            animation: filmScroll 8s linear infinite;
         }
 
-        .slot-column:nth-child(2) {
-            animation-duration: 3.5s;
-            animation-delay: -0.5s;
-        }
+        .film-strip:nth-child(1) { left: 10%; }
+        .film-strip:nth-child(2) { left: 30%; animation-duration: 10s; }
+        .film-strip:nth-child(3) { left: 50%; animation-duration: 12s; }
+        .film-strip:nth-child(4) { left: 70%; animation-duration: 9s; }
+        .film-strip:nth-child(5) { left: 90%; animation-duration: 11s; }
 
-        .slot-column:nth-child(3) {
-            animation-duration: 4s;
-            animation-delay: -1s;
-        }
-
-        .slot-column:nth-child(4) {
-            animation-duration: 3.2s;
-            animation-delay: -1.5s;
-        }
-
-        .slot-column:nth-child(5) {
-            animation-duration: 3.8s;
-            animation-delay: -2s;
-        }
-
-        @keyframes slotSpin {
+        @keyframes filmScroll {
             0% { transform: translateY(0); }
             100% { transform: translateY(-50%); }
+        }
+
+        /* 播放按钮图标 */
+        .play-icon {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 30px solid rgba(0, 168, 89, 0.4);
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            animation: floatPlay 6s ease-in-out infinite;
+        }
+
+        .play-icon:nth-child(6) { top: 15%; left: 15%; animation-delay: 0s; }
+        .play-icon:nth-child(7) { top: 45%; left: 80%; animation-delay: 2s; }
+        .play-icon:nth-child(8) { top: 75%; left: 25%; animation-delay: 4s; }
+
+        @keyframes floatPlay {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-30px) scale(1.2); opacity: 0.6; }
+        }
+
+        /* 短剧文字 */
+        .drama-text {
+            position: absolute;
+            font-size: 24px;
+            font-weight: 700;
+            color: rgba(255, 215, 0, 0.4);
+            animation: textFloat 8s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        .drama-text:nth-child(9) { top: 20%; left: 60%; animation-delay: 0s; }
+        .drama-text:nth-child(10) { top: 55%; left: 40%; animation-delay: 3s; }
+        .drama-text:nth-child(11) { top: 85%; left: 70%; animation-delay: 6s; }
+
+        @keyframes textFloat {
+            0%, 100% { transform: translateX(0) translateY(0); opacity: 0.2; }
+            50% { transform: translateX(20px) translateY(-20px); opacity: 0.5; }
         }
 
         /* 闪烁光效 */
         .sparkle {
             position: fixed;
-            width: 4px;
-            height: 4px;
-            background: #dc2626;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(45deg, #00a859, #ffd700);
             border-radius: 50%;
             pointer-events: none;
             z-index: 1;
             animation: sparkle 2s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(0, 168, 89, 0.8);
         }
 
         @keyframes sparkle {
@@ -329,31 +377,43 @@ function generateHtmlContent() {
         }
 
         .container {
-            max-width: 500px;
+            max-width: 480px;
             width: 100%;
             text-align: center;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px 20px;
             position: relative;
             z-index: 2;
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 20px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 8px 32px rgba(220, 38, 38, 0.3);
+            background: linear-gradient(135deg, rgba(0, 30, 20, 0.6) 0%, rgba(0, 20, 15, 0.8) 100%);
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 151, 57, 0.25), 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            border: 1px solid rgba(0, 168, 89, 0.3);
         }
 
         .logo-container {
-            width: 120px;
-            height: 120px;
-            margin: 40px auto;
-            border-radius: 24px;
-            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.6);
-            background: linear-gradient(135deg, #2a0a0a 0%, #1a0000 100%);
+            width: 140px;
+            height: 140px;
+            margin: 20px auto 30px;
+            border-radius: 32px;
+            box-shadow: 0 10px 40px rgba(0, 168, 89, 0.5), 0 0 80px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, rgba(0, 151, 57, 0.25) 0%, rgba(255, 215, 0, 0.2) 100%);
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid #dc2626;
+            border: 3px solid rgba(0, 168, 89, 0.6);
+            position: relative;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% {
+                box-shadow: 0 10px 40px rgba(0, 168, 89, 0.5), 0 0 80px rgba(255, 215, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 10px 50px rgba(0, 168, 89, 0.7), 0 0 100px rgba(255, 215, 0, 0.5);
+            }
         }
 
         .logo {
@@ -363,36 +423,59 @@ function generateHtmlContent() {
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 15px;
-            color: #fff;
+            background: linear-gradient(135deg, #00c853 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .description {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #cccccc;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #d1d5db;
             margin-bottom: 30px;
-            padding: 0 20px;
+            padding: 0 10px;
+            font-weight: 400;
         }
 
         .download-btn {
-            background: linear-gradient(45deg, #dc2626 0%, #ef4444 50%, #dc2626 100%);
+            background: linear-gradient(135deg, #009739 0%, #ffd700 100%);
             background-size: 200% 200%;
             color: #ffffff;
-            padding: 16px 40px;
-            border-radius: 30px;
+            padding: 18px 50px;
+            border-radius: 50px;
             text-decoration: none;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 700;
             display: inline-block;
             margin: 20px 0;
-            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.7), 0 0 30px rgba(220, 38, 38, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 30px rgba(0, 151, 57, 0.6), 0 0 40px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
-            animation: buttonGlow 2s ease-in-out infinite;
-            border: 2px solid #991b1b;
+            animation: buttonGlow 3s ease-in-out infinite;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .download-btn:hover::before {
+            left: 100%;
         }
 
         @keyframes buttonGlow {
@@ -401,47 +484,56 @@ function generateHtmlContent() {
         }
 
         .download-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 15px rgba(220, 38, 38, 0.7);
+            transform: scale(0.95);
+            box-shadow: 0 5px 20px rgba(0, 151, 57, 0.7);
         }
 
         .features {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 40px 0;
-            padding: 0 20px;
+            gap: 15px;
+            margin: 35px 0 25px;
+            padding: 0 5px;
         }
 
         .feature {
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(153, 27, 27, 0.15) 100%);
-            padding: 20px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 151, 57, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
+            padding: 20px 15px;
+            border-radius: 20px;
             text-align: center;
-            border: 1px solid rgba(220, 38, 38, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(0, 168, 89, 0.35);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .feature:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(220, 38, 38, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 151, 57, 0.4);
+            border-color: rgba(0, 168, 89, 0.6);
+            background: linear-gradient(135deg, rgba(0, 151, 57, 0.25) 0%, rgba(255, 215, 0, 0.15) 100%);
         }
 
         .feature h3 {
-            color: #ef4444;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+            font-size: 16px;
+            background: linear-gradient(135deg, #00c853 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
 
         .feature p {
-            color: #cccccc;
-            font-size: 14px;
+            color: #d1d5db;
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .version {
-            color: #888;
-            font-size: 14px;
-            margin-top: 30px;
+            color: #9ca3af;
+            font-size: 13px;
+            margin-top: 20px;
+            opacity: 0.7;
         }
 
         @media (max-width: 480px) {
@@ -456,28 +548,24 @@ function generateHtmlContent() {
     </style>
 </head>
 <body>
-    <!-- 电影胶片背景动画 -->
+    <!-- 短剧主题背景动画 -->
     <div class="slot-background">
-        <div class="slot-column">
-            �����️�️�🌟✨💫
-            �����️�️�🌟✨💫
-        </div>
-        <div class="slot-column">
-            �����📽️�️✨🎪💫
-            �����📽️�️✨🎪💫
-        </div>
-        <div class="slot-column">
-            ��️����📽️🎪💫✨
-            ��️����📽️🎪💫✨
-        </div>
-        <div class="slot-column">
-            �🎬�️���️�💫�✨
-            �🎬�️���️�💫�✨
-        </div>
-        <div class="slot-column">
-            ��️����📽️🎪✨💫
-            ��️��🎦🎥📽️�✨💫
-        </div>
+        <!-- 电影胶片条纹 -->
+        <div class="film-strip"></div>
+        <div class="film-strip"></div>
+        <div class="film-strip"></div>
+        <div class="film-strip"></div>
+        <div class="film-strip"></div>
+        
+        <!-- 播放按钮图标 -->
+        <div class="play-icon"></div>
+        <div class="play-icon"></div>
+        <div class="play-icon"></div>
+        
+        <!-- 短剧文字 -->
+        <div class="drama-text">DRAMA</div>
+        <div class="drama-text">SÉRIES</div>
+        <div class="drama-text">REELS</div>
     </div>
 
     <div class="container">
