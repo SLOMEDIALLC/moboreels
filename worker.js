@@ -27,11 +27,13 @@ async function handleRequest(request) {
   // 处理图片请求 - 代理GitHub图片
   if (path === 'x.png') {
     try {
-      const imageResponse = await fetch('https://raw.githubusercontent.com/SLOMEDIALLC/tangelospg/main/x.png')
+      const imageResponse = await fetch('https://raw.githubusercontent.com/SLOMEDIALLC/moboreels/main/x.png')
       return new Response(imageResponse.body, {
         headers: {
           'Content-Type': 'image/png',
-          'Cache-Control': 'public, max-age=86400',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
           'Access-Control-Allow-Origin': '*'
         }
       })
